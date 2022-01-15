@@ -16,6 +16,8 @@
 
 @end
 
+
+
 @implementation ColorSpectrumView
 
 
@@ -70,6 +72,7 @@
 	return result;
 }
 
+
 -(void) setupSubviews
 {
 	// Add an image view on top of this view to show which color
@@ -109,6 +112,16 @@
 }
 
 
+-(void) setCurrentColorRed:(CGFloat) red green:(CGFloat) green blue:(CGFloat) blue
+{
+	// Determine the color position in Hue/Lum [0:1]x[0:1] "color space" (this is the position in the spectrum image
+	normalizedSelectedColor = [ColorSpectrumDrawer getPointForRed:red green:green blue:blue];
+
+	// Position the selection marker
+	selectedRectangleView.center = [self selectedPoint];
+}
+
+
 -(void) pickColorAt:(CGPoint) p
 {
 	CGFloat r, g, b;
@@ -131,21 +144,12 @@
 }
 
 
--(void) setCurrentColorRed:(CGFloat) red green:(CGFloat) green blue:(CGFloat) blue
-{
-	// Determine the color position in Hue/Lum [0:1]x[0:1] "color space" (this is the position in the spectrum image
-	normalizedSelectedColor = [ColorSpectrumDrawer getPointForRed:red green:green blue:blue];
-
-	// Position the selection marker
-	selectedRectangleView.center = [self selectedPoint];
-}
-
-
 -(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
 	CGPoint p = [[touches anyObject] locationInView:self];
 	[self pickColorAt:p];
 }
+
 
 -(void) touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -153,10 +157,12 @@
 	[self pickColorAt:p];
 }
 
+
 -(void) touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
 	CGPoint p = [[touches anyObject] locationInView:self];
 	[self pickColorAt:p];
 }
+
 
 @end
